@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { booleanQueryParam } from "../../common/zod-helpers.js";
 
 const PRIORITIES = ["urgent", "high", "medium", "low", "none"] as const;
 const STATE_GROUPS = ["backlog", "unstarted", "started", "completed", "cancelled"] as const;
@@ -28,7 +29,7 @@ export const listIssuesQuerySchema = z.object({
   labelId: z.string().uuid().optional(),
   createdById: z.string().uuid().optional(),
   parentId: z.string().uuid().optional(),
-  isArchived: z.coerce.boolean().optional(),
+  isArchived: booleanQueryParam.optional(),
 });
 
 export const bulkUpdateIssuesSchema = z.object({

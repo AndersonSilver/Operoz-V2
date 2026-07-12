@@ -13,6 +13,8 @@ import { draftIssueRouter } from "../issues/draft-issue.routes.js";
 import { cycleController } from "../cycles/cycle.controller.js";
 import { moduleController } from "../modules/module.controller.js";
 import { workspaceViewRouter } from "../views/view.routes.js";
+import { notificationRouter } from "../notifications/notification.routes.js";
+import { notificationController } from "../notifications/notification.controller.js";
 
 export const workspaceRouter = Router();
 
@@ -25,6 +27,12 @@ workspaceRouter.get("/:slug/estimates", loadWorkspace, asyncHandler(estimateCont
 workspaceRouter.get("/:slug/cycles", loadWorkspace, asyncHandler(cycleController.listForWorkspace));
 workspaceRouter.get("/:slug/modules", loadWorkspace, asyncHandler(moduleController.listForWorkspace));
 workspaceRouter.use("/:slug/views", loadWorkspace, workspaceViewRouter);
+workspaceRouter.use("/:slug/notifications", loadWorkspace, notificationRouter);
+workspaceRouter.get(
+  "/:slug/users/notifications/unread",
+  loadWorkspace,
+  asyncHandler(notificationController.unreadCounts),
+);
 workspaceRouter.get("/:slug/issues/search", loadWorkspace, asyncHandler(issueLookupController.search));
 workspaceRouter.get(
   "/:slug/issues/:identifier/:sequenceId",

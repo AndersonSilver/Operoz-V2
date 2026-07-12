@@ -201,7 +201,13 @@ class IssueService {
         createdById: actor.id,
       });
       await manager.save(issue);
-      await syncIssueMentions(manager, issue.id, issue.descriptionJson);
+      await syncIssueMentions(manager, issue.id, issue.descriptionJson, {
+        workspaceId: project.workspaceId,
+        projectId: project.id,
+        actorId: actor.id,
+        issueName: issue.name,
+        senderName: actor.fullName,
+      });
 
       for (const assigneeId of assigneeIds) {
         await manager.save(manager.create(IssueAssignee, { issueId: issue.id, assigneeId }));
@@ -270,7 +276,13 @@ class IssueService {
       }
       await manager.save(issue);
       if (input.descriptionJson !== undefined) {
-        await syncIssueMentions(manager, issue.id, issue.descriptionJson);
+        await syncIssueMentions(manager, issue.id, issue.descriptionJson, {
+          workspaceId: project.workspaceId,
+          projectId: project.id,
+          actorId: actor.id,
+          issueName: issue.name,
+          senderName: actor.fullName,
+        });
       }
 
       if (input.assigneeIds) {

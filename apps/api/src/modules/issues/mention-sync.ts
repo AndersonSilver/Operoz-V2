@@ -1,5 +1,6 @@
 import type { EntityManager } from "typeorm";
 import { IssueMention } from "../../entities/issue-mention.entity.js";
+import { notificationService } from "../notifications/notification.service.js";
 
 /**
  * Extrai IDs de usuário de nós de menção num documento rich-text no
@@ -32,6 +33,7 @@ export async function syncIssueMentions(
   manager: EntityManager,
   issueId: string,
   descriptionJson: Record<string, unknown> | null | undefined,
+  notifyContext?: { workspaceId: string; projectId: string; actorId: string | null; issueName: string; senderName: string },
 ): Promise<void> {
   try {
     const mentionedIds = extractMentionedUserIds(descriptionJson);
@@ -46,6 +48,21 @@ export async function syncIssueMentions(
     }
     if (toRemove.length > 0) {
       await manager.remove(toRemove);
+    }
+
+    if (notifyContext && toAdd.length > 0) {
+      await notificationService.notify(manager, {
+        workspaceId: notifyContext.workspaceId,
+        projectId: notifyContext.projectId,
+        entityType: "mention",
+        entityIdentifier: issueId,
+        title: notifyContext.issueName,
+        messageHtml: `<p>${notifyContext.senderName} mencionou você em "${notifyContext.issueName}"</p>`,
+        sender: notifyContext.senderName,
+        triggeredById: notifyContext.actorId,
+        receiverIds: toAdd,
+        preferenceKey: "mention",
+      });
     }
   } catch {
     // best-effort: falha ao sincronizar menções não deve derrubar o save da issue.

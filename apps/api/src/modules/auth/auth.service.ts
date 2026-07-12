@@ -6,6 +6,8 @@ import { redis } from "../../common/redis.js";
 import { emailService } from "../../common/email.service.js";
 import { env } from "../../config/env.js";
 import { ApiError } from "../../common/api-error.js";
+import { AppDataSource } from "../../config/data-source.js";
+import { notificationService } from "../notifications/notification.service.js";
 
 const MAGIC_LINK_TTL_SECONDS = 10 * 60;
 const PASSWORD_RESET_TTL_SECONDS = 60 * 60;
@@ -46,6 +48,7 @@ class AuthService {
 
     const profile = Profile.create({ userId: user.id });
     await profile.save();
+    await AppDataSource.manager.transaction((manager) => notificationService.createDefaultPreference(manager, user.id));
 
     return user;
   }
@@ -132,6 +135,7 @@ class AuthService {
       user = User.create({ email, firstName: "", lastName: "", isEmailVerified: true });
       await user.save();
       await Profile.create({ userId: user.id }).save();
+      await AppDataSource.manager.transaction((manager) => notificationService.createDefaultPreference(manager, user!.id));
     } else if (!user.isEmailVerified) {
       user.isEmailVerified = true;
       await user.save();

@@ -4,6 +4,7 @@ import { requireAuth } from "../../middleware/require-auth.middleware.js";
 import { asyncHandler } from "../../common/async-handler.js";
 import { workspaceInviteController } from "../workspaces/workspace.controller.js";
 import { projectInviteController } from "../projects/project.controller.js";
+import { notificationController } from "../notifications/notification.controller.js";
 
 export const userRouter = Router();
 
@@ -14,3 +15,5 @@ userRouter.get("/me/workspace-invitations", asyncHandler(workspaceInviteControll
 userRouter.post("/me/workspace-invitations/accept", asyncHandler(workspaceInviteController.acceptMine));
 userRouter.get("/me/project-invitations", asyncHandler(projectInviteController.listMine));
 userRouter.post("/me/project-invitations/accept", asyncHandler(projectInviteController.acceptMine));
+userRouter.get("/me/notification-preferences", asyncHandler(notificationController.getPreference));
+userRouter.patch("/me/notification-preferences", asyncHandler(notificationController.updatePreference));

@@ -39,6 +39,8 @@ import { Page } from "../entities/page.entity.js";
 import { PageLabel } from "../entities/page-label.entity.js";
 import { PageVersion } from "../entities/page-version.entity.js";
 import { IssueView } from "../entities/issue-view.entity.js";
+import { Notification } from "../entities/notification.entity.js";
+import { UserNotificationPreference } from "../entities/user-notification-preference.entity.js";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -86,6 +88,8 @@ export const AppDataSource = new DataSource({
     PageLabel,
     PageVersion,
     IssueView,
+    Notification,
+    UserNotificationPreference,
   ],
   migrations: [env.isProduction ? "dist/migrations/*.js" : "src/migrations/*.ts"],
   migrationsTableName: "migrations_history",
