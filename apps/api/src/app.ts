@@ -23,6 +23,7 @@ import { errorHandler, notFoundHandler } from "./middleware/error-handler.middle
 import { authRouter } from "./modules/auth/auth.routes.js";
 import { userRouter } from "./modules/users/user.routes.js";
 import { workspaceRouter, workspaceInviteRouter } from "./modules/workspaces/workspace.routes.js";
+import { projectInviteRouter } from "./modules/projects/project.routes.js";
 
 export function createApp(): Express {
   const app = express();
@@ -63,6 +64,7 @@ export function createApp(): Express {
   app.use("/users", userRouter);
   app.use("/workspaces", workspaceRouter);
   app.use("/workspace-invitations", workspaceInviteRouter);
+  app.use("/project-invitations", projectInviteRouter);
 
   app.use(notFoundHandler);
   app.use(errorHandler);

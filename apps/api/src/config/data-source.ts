@@ -9,6 +9,10 @@ import { WorkspaceMember } from "../entities/workspace-member.entity.js";
 import { WorkspaceInvite } from "../entities/workspace-invite.entity.js";
 import { WorkspaceUserProperties } from "../entities/workspace-user-properties.entity.js";
 import { WorkspaceTheme } from "../entities/workspace-theme.entity.js";
+import { Project } from "../entities/project.entity.js";
+import { ProjectMember } from "../entities/project-member.entity.js";
+import { ProjectInvite } from "../entities/project-invite.entity.js";
+import { Favorite } from "../entities/favorite.entity.js";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -26,6 +30,10 @@ export const AppDataSource = new DataSource({
     WorkspaceInvite,
     WorkspaceUserProperties,
     WorkspaceTheme,
+    Project,
+    ProjectMember,
+    ProjectInvite,
+    Favorite,
   ],
   migrations: [env.isProduction ? "dist/migrations/*.js" : "src/migrations/*.ts"],
   migrationsTableName: "migrations_history",

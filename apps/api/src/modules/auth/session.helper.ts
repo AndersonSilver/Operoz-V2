@@ -1,6 +1,7 @@
 import type { Request } from "express";
 import type { User } from "../../entities/user.entity.js";
 import { workspaceService } from "../workspaces/workspace.service.js";
+import { projectService } from "../projects/project.service.js";
 
 /**
  * Cria a sessão autenticada para `user`. Regenera o session ID antes de
@@ -23,9 +24,12 @@ export async function establishSession(req: Request, user: User): Promise<void> 
     });
   });
 
-  // Todo login/signup bem-sucedido processa convites de workspace
-  // pendentes para o e-mail do usuário (equivalente ao fluxo original).
+  // Todo login/signup bem-sucedido processa convites pendentes para o
+  // e-mail do usuário (equivalente ao fluxo original). Workspace primeiro:
+  // convite de projeto só se concretiza se o usuário já for membro do
+  // workspace correspondente.
   await workspaceService.autoJoinPendingInvites(user);
+  await projectService.autoJoinPendingInvites(user);
 }
 
 export function destroySession(req: Request): Promise<void> {

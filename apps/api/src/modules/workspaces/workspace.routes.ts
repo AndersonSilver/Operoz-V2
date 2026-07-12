@@ -4,10 +4,12 @@ import { requireAuth } from "../../middleware/require-auth.middleware.js";
 import { loadWorkspace, requireWorkspaceOwner, requireWorkspaceRole } from "./workspace.middleware.js";
 import { asyncHandler } from "../../common/async-handler.js";
 import { WorkspaceRole } from "../../common/roles.js";
+import { projectRouter } from "../projects/project.routes.js";
 
 export const workspaceRouter = Router();
 
 workspaceRouter.use(requireAuth);
+workspaceRouter.use("/:slug/projects", loadWorkspace, projectRouter);
 
 workspaceRouter.get("/", asyncHandler(workspaceController.list));
 workspaceRouter.post("/", asyncHandler(workspaceController.create));

@@ -78,6 +78,24 @@ class EmailService {
       text: `${inviterName} convidou você para o workspace "${workspaceName}": ${url}`,
     });
   }
+
+  async sendProjectInvite(to: string, projectName: string, url: string): Promise<void> {
+    await this.send({
+      to,
+      subject: `Você foi convidado para o projeto "${projectName}" no Operoz`,
+      html: `<p>Você foi convidado a colaborar no projeto <strong>${projectName}</strong>.</p><p><a href="${url}">${url}</a></p>`,
+      text: `Você foi convidado para o projeto "${projectName}": ${url}`,
+    });
+  }
+
+  async sendProjectMemberAdded(to: string, projectName: string): Promise<void> {
+    await this.send({
+      to,
+      subject: `Você foi adicionado ao projeto "${projectName}" no Operoz`,
+      html: `<p>Você foi adicionado como membro do projeto <strong>${projectName}</strong>.</p>`,
+      text: `Você foi adicionado ao projeto "${projectName}".`,
+    });
+  }
 }
 
 export const emailService = new EmailService();
