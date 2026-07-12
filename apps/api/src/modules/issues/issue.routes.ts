@@ -4,6 +4,7 @@ import { loadIssue } from "./issue.middleware.js";
 import { requireProjectRole } from "../projects/project.middleware.js";
 import { asyncHandler } from "../../common/async-handler.js";
 import { WorkspaceRole } from "../../common/roles.js";
+import { issueSocialRouter } from "./issue-social.routes.js";
 
 /** Montado em `/workspaces/:slug/projects/:projectId/issues` (depois de `loadProject`). Guest só lê. */
 export const issueRouter = Router();
@@ -55,3 +56,5 @@ issueRouter.delete(
   asyncHandler(issueController.unarchive),
 );
 issueRouter.get("/:issueId/meta", loadIssue, asyncHandler(issueController.meta));
+
+issueRouter.use("/:issueId", issueSocialRouter);

@@ -1,4 +1,5 @@
 import { Issue, type IssuePriority } from "../../entities/issue.entity.js";
+import { IssueActivity } from "../../entities/issue-activity.entity.js";
 import { IssueAssignee } from "../../entities/issue-assignee.entity.js";
 import { IssueLabel } from "../../entities/issue-label.entity.js";
 import { State } from "../../entities/state.entity.js";
@@ -9,6 +10,8 @@ import { AppDataSource } from "../../config/data-source.js";
 import { ApiError } from "../../common/api-error.js";
 import { nextSequenceId } from "./issue-sequence.js";
 import { logFieldDiffs, logIssueActivity } from "./issue-activity.service.js";
+import { syncIssueMentions } from "./mention-sync.js";
+import { subscriberService } from "./subscriber.service.js";
 
 interface IssueWriteInput {
   name?: string;
@@ -198,6 +201,7 @@ class IssueService {
         createdById: actor.id,
       });
       await manager.save(issue);
+      await syncIssueMentions(manager, issue.id, issue.descriptionJson);
 
       for (const assigneeId of assigneeIds) {
         await manager.save(manager.create(IssueAssignee, { issueId: issue.id, assigneeId }));
@@ -216,6 +220,12 @@ class IssueService {
 
       return issue.id;
     });
+
+    // Auto-subscribe do autor e dos assignees (best-effort, idempotente).
+    await subscriberService.ensureSubscribed(issueId, actor.id);
+    for (const assigneeId of assigneeIds) {
+      await subscriberService.ensureSubscribed(issueId, assigneeId);
+    }
 
     return this.findOrThrow(project.id, issueId);
   }
@@ -259,6 +269,9 @@ class IssueService {
         issue.sortOrder = await this.computeSortOrder(project.id, nextState.id);
       }
       await manager.save(issue);
+      if (input.descriptionJson !== undefined) {
+        await syncIssueMentions(manager, issue.id, issue.descriptionJson);
+      }
 
       if (input.assigneeIds) {
         await manager.delete(IssueAssignee, { issueId: issue.id });
@@ -306,6 +319,12 @@ class IssueService {
         after,
       );
     });
+
+    if (input.assigneeIds) {
+      for (const assigneeId of input.assigneeIds) {
+        await subscriberService.ensureSubscribed(issue.id, assigneeId);
+      }
+    }
 
     return this.findOrThrow(project.id, issue.id);
   }
@@ -427,6 +446,10 @@ class IssueService {
     return issue;
   }
 
+  async getActivityTimeline(issueId: string) {
+    return IssueActivity.find({ where: { issueId }, order: { createdAt: "ASC" } });
+  }
+
   async listByIds(project: Project, ids: string[]) {
     if (ids.length === 0) return [];
     return Issue.getRepository()
@@ -434,6 +457,64 @@ class IssueService {
       .where("i.projectId = :projectId", { projectId: project.id })
       .andWhere("i.id IN (:...ids)", { ids })
       .getMany();
+  }
+
+  /** Filhos diretos (1 nível, não a árvore recursiva inteira) + contagem por grupo de estado. */
+  async getSubIssues(project: Project, issueId: string) {
+    const children = await Issue.find({ where: { parentId: issueId, projectId: project.id } });
+
+    const rows = await Issue.getRepository()
+      .createQueryBuilder("i")
+      .leftJoin("states", "s", "s.id = i.stateId")
+      .select("s.group", "group")
+      .addSelect("COUNT(*)", "count")
+      .where("i.parentId = :issueId", { issueId })
+      .andWhere("i.projectId = :projectId", { projectId: project.id })
+      .groupBy("s.group")
+      .getRawMany<{ group: string | null; count: string }>();
+
+    const stateDistribution: Record<string, number> = {
+      backlog: 0,
+      unstarted: 0,
+      started: 0,
+      completed: 0,
+      cancelled: 0,
+    };
+    for (const row of rows) {
+      if (row.group && row.group in stateDistribution) stateDistribution[row.group] = Number(row.count);
+    }
+
+    return { subIssues: children, stateDistribution };
+  }
+
+  /** Atribui vários filhos de uma vez a um pai — cada item passa pela mesma validação de ciclo do update individual. */
+  async bulkAssignParent(project: Project, actor: User, parentId: string, issueIds: string[]): Promise<void> {
+    await this.findOrThrow(project.id, parentId);
+
+    await AppDataSource.transaction(async (manager) => {
+      for (const childId of issueIds) {
+        if (childId === parentId) continue;
+        const child = await manager.findOne(Issue, { where: { id: childId, projectId: project.id } });
+        if (!child) continue; // fora do projeto: ignorado silenciosamente, não faz sentido bulk-assign cross-project
+
+        await this.assertNoParentCycle(project.id, childId, parentId);
+
+        const oldParentId = child.parentId;
+        child.parentId = parentId;
+        await manager.save(child);
+
+        await logIssueActivity(manager, {
+          issueId: child.id,
+          projectId: project.id,
+          workspaceId: project.workspaceId,
+          actorId: actor.id,
+          verb: "updated",
+          field: "parentId",
+          oldIdentifier: oldParentId,
+          newIdentifier: parentId,
+        });
+      }
+    });
   }
 }
 

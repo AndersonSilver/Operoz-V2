@@ -22,6 +22,14 @@ import { IssueAssignee } from "../entities/issue-assignee.entity.js";
 import { IssueLabel } from "../entities/issue-label.entity.js";
 import { IssueActivity } from "../entities/issue-activity.entity.js";
 import { DraftIssue } from "../entities/draft-issue.entity.js";
+import { IssueComment } from "../entities/issue-comment.entity.js";
+import { IssueAttachment } from "../entities/issue-attachment.entity.js";
+import { IssueLink } from "../entities/issue-link.entity.js";
+import { IssueReaction } from "../entities/issue-reaction.entity.js";
+import { CommentReaction } from "../entities/comment-reaction.entity.js";
+import { IssueMention } from "../entities/issue-mention.entity.js";
+import { IssueSubscriber } from "../entities/issue-subscriber.entity.js";
+import { IssueRelation } from "../entities/issue-relation.entity.js";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -52,6 +60,14 @@ export const AppDataSource = new DataSource({
     IssueLabel,
     IssueActivity,
     DraftIssue,
+    IssueComment,
+    IssueAttachment,
+    IssueLink,
+    IssueReaction,
+    CommentReaction,
+    IssueMention,
+    IssueSubscriber,
+    IssueRelation,
   ],
   migrations: [env.isProduction ? "dist/migrations/*.js" : "src/migrations/*.ts"],
   migrationsTableName: "migrations_history",
