@@ -64,6 +64,20 @@ class EmailService {
       text: `Redefina sua senha: ${url} (expira em 1 hora)`,
     });
   }
+
+  async sendWorkspaceInvite(
+    to: string,
+    workspaceName: string,
+    inviterName: string,
+    url: string,
+  ): Promise<void> {
+    await this.send({
+      to,
+      subject: `${inviterName} convidou você para o workspace "${workspaceName}" no Operoz`,
+      html: `<p>${inviterName} convidou você para colaborar no workspace <strong>${workspaceName}</strong>.</p><p><a href="${url}">${url}</a></p>`,
+      text: `${inviterName} convidou você para o workspace "${workspaceName}": ${url}`,
+    });
+  }
 }
 
 export const emailService = new EmailService();

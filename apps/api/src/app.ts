@@ -22,6 +22,7 @@ import { csrfMiddleware } from "./middleware/csrf.middleware.js";
 import { errorHandler, notFoundHandler } from "./middleware/error-handler.middleware.js";
 import { authRouter } from "./modules/auth/auth.routes.js";
 import { userRouter } from "./modules/users/user.routes.js";
+import { workspaceRouter, workspaceInviteRouter } from "./modules/workspaces/workspace.routes.js";
 
 export function createApp(): Express {
   const app = express();
@@ -60,6 +61,8 @@ export function createApp(): Express {
 
   app.use("/auth", authRouter);
   app.use("/users", userRouter);
+  app.use("/workspaces", workspaceRouter);
+  app.use("/workspace-invitations", workspaceInviteRouter);
 
   app.use(notFoundHandler);
   app.use(errorHandler);

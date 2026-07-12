@@ -4,6 +4,11 @@ import { env } from "./env.js";
 import { User } from "../entities/user.entity.js";
 import { Profile } from "../entities/profile.entity.js";
 import { Account } from "../entities/account.entity.js";
+import { Workspace } from "../entities/workspace.entity.js";
+import { WorkspaceMember } from "../entities/workspace-member.entity.js";
+import { WorkspaceInvite } from "../entities/workspace-invite.entity.js";
+import { WorkspaceUserProperties } from "../entities/workspace-user-properties.entity.js";
+import { WorkspaceTheme } from "../entities/workspace-theme.entity.js";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -12,7 +17,16 @@ export const AppDataSource = new DataSource({
   // são a única fonte de verdade, inclusive em desenvolvimento.
   synchronize: false,
   logging: env.isDevelopment ? ["error", "warn", "migration"] : ["error"],
-  entities: [User, Profile, Account],
+  entities: [
+    User,
+    Profile,
+    Account,
+    Workspace,
+    WorkspaceMember,
+    WorkspaceInvite,
+    WorkspaceUserProperties,
+    WorkspaceTheme,
+  ],
   migrations: [env.isProduction ? "dist/migrations/*.js" : "src/migrations/*.ts"],
   migrationsTableName: "migrations_history",
 });
