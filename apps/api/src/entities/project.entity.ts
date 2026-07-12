@@ -95,4 +95,10 @@ export class Project extends BaseEntity {
 
   @Column({ type: "timestamptz", nullable: true })
   archivedAt!: Date | null;
+
+  @Column({ type: "uuid", nullable: true })
+  defaultStateId!: string | null;
+
+  @Column({ type: "uuid", nullable: true })
+  estimateId!: string | null;
 }

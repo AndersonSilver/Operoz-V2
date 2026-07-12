@@ -5,6 +5,10 @@ import { requireWorkspaceRole } from "../workspaces/workspace.middleware.js";
 import { requireAuth } from "../../middleware/require-auth.middleware.js";
 import { asyncHandler } from "../../common/async-handler.js";
 import { WorkspaceRole } from "../../common/roles.js";
+import { stateRouter } from "../states/state.routes.js";
+import { labelRouter } from "../labels/label.routes.js";
+import { estimateRouter } from "../estimates/estimate.routes.js";
+import { estimateController } from "../estimates/estimate.controller.js";
 
 /** Montado em `/workspaces/:slug/projects` (depois de `loadWorkspace`, então `req.workspace`/`req.workspaceMember` já existem). */
 export const projectRouter = Router();
@@ -87,6 +91,18 @@ projectRouter.delete(
   requireProjectRole(WorkspaceRole.ADMIN),
   asyncHandler(projectController.removeInvite),
 );
+
+projectRouter.get("/:projectId/project-estimates", loadProject, asyncHandler(estimateController.activePoints));
+projectRouter.delete(
+  "/:projectId/project-estimates",
+  loadProject,
+  requireProjectRole(WorkspaceRole.ADMIN),
+  asyncHandler(estimateController.deactivate),
+);
+
+projectRouter.use("/:projectId/states", loadProject, stateRouter);
+projectRouter.use("/:projectId/labels", loadProject, labelRouter);
+projectRouter.use("/:projectId/estimates", loadProject, estimateRouter);
 
 /** Rotas por token de convite de projeto — não dependem de `:slug`/`:projectId`. */
 export const projectInviteRouter = Router();

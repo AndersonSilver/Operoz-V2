@@ -13,6 +13,10 @@ import { Project } from "../entities/project.entity.js";
 import { ProjectMember } from "../entities/project-member.entity.js";
 import { ProjectInvite } from "../entities/project-invite.entity.js";
 import { Favorite } from "../entities/favorite.entity.js";
+import { State } from "../entities/state.entity.js";
+import { Label } from "../entities/label.entity.js";
+import { Estimate } from "../entities/estimate.entity.js";
+import { EstimatePoint } from "../entities/estimate-point.entity.js";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -34,6 +38,10 @@ export const AppDataSource = new DataSource({
     ProjectMember,
     ProjectInvite,
     Favorite,
+    State,
+    Label,
+    Estimate,
+    EstimatePoint,
   ],
   migrations: [env.isProduction ? "dist/migrations/*.js" : "src/migrations/*.ts"],
   migrationsTableName: "migrations_history",

@@ -3,6 +3,10 @@ import { ZodError } from "zod";
 import { ApiError } from "../common/api-error.js";
 import { logger } from "../common/logger.js";
 
+function isPostgresForeignKeyViolation(err: unknown): boolean {
+  return typeof err === "object" && err !== null && "code" in err && (err as { code: unknown }).code === "23503";
+}
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function errorHandler(err: unknown, req: Request, res: Response, _next: NextFunction) {
   if (err instanceof ApiError) {
@@ -18,6 +22,14 @@ export function errorHandler(err: unknown, req: Request, res: Response, _next: N
         message: "Dados inválidos.",
         details: err.flatten().fieldErrors,
       },
+    });
+  }
+
+  // Violação de FK com `ON DELETE RESTRICT` (ex.: tentar excluir um State
+  // ainda referenciado por Issues) — código 23503 do Postgres.
+  if (isPostgresForeignKeyViolation(err)) {
+    return res.status(409).json({
+      error: { code: "referenced_by_other_records", message: "Este registro ainda é referenciado por outros dados." },
     });
   }
 

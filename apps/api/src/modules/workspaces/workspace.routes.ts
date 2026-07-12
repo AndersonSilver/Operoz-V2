@@ -5,11 +5,17 @@ import { loadWorkspace, requireWorkspaceOwner, requireWorkspaceRole } from "./wo
 import { asyncHandler } from "../../common/async-handler.js";
 import { WorkspaceRole } from "../../common/roles.js";
 import { projectRouter } from "../projects/project.routes.js";
+import { labelController } from "../labels/label.controller.js";
+import { stateController } from "../states/state.controller.js";
+import { estimateController } from "../estimates/estimate.controller.js";
 
 export const workspaceRouter = Router();
 
 workspaceRouter.use(requireAuth);
 workspaceRouter.use("/:slug/projects", loadWorkspace, projectRouter);
+workspaceRouter.get("/:slug/labels", loadWorkspace, asyncHandler(labelController.listForWorkspace));
+workspaceRouter.get("/:slug/states", loadWorkspace, asyncHandler(stateController.listForWorkspace));
+workspaceRouter.get("/:slug/estimates", loadWorkspace, asyncHandler(estimateController.listForWorkspace));
 
 workspaceRouter.get("/", asyncHandler(workspaceController.list));
 workspaceRouter.post("/", asyncHandler(workspaceController.create));
