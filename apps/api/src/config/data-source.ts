@@ -44,6 +44,8 @@ import { UserNotificationPreference } from "../entities/user-notification-prefer
 import { ApiToken } from "../entities/api-token.entity.js";
 import { Webhook } from "../entities/webhook.entity.js";
 import { WebhookLog } from "../entities/webhook-log.entity.js";
+import { AnalyticView } from "../entities/analytic-view.entity.js";
+import { ExporterHistory } from "../entities/exporter-history.entity.js";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -96,6 +98,8 @@ export const AppDataSource = new DataSource({
     ApiToken,
     Webhook,
     WebhookLog,
+    AnalyticView,
+    ExporterHistory,
   ],
   migrations: [env.isProduction ? "dist/migrations/*.js" : "src/migrations/*.ts"],
   migrationsTableName: "migrations_history",

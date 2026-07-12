@@ -9,3 +9,4 @@ coverage/
 *.tsbuildinfo
 .vscode/
 !.vscode/extensions.json
+.exports/
