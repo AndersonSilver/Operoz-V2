@@ -12,7 +12,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "migration:run": "tsx src/scripts/migrate.ts run",
-    "migration:revert": "tsx src/scripts/migrate.ts revert"
+    "migration:revert": "tsx src/scripts/migrate.ts revert",
+    "job:archive-issues": "tsx src/scripts/archive-issues.ts"
   },
   "dependencies": {
     "argon2": "0.41.1",

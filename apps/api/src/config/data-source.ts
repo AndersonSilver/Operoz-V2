@@ -17,6 +17,11 @@ import { State } from "../entities/state.entity.js";
 import { Label } from "../entities/label.entity.js";
 import { Estimate } from "../entities/estimate.entity.js";
 import { EstimatePoint } from "../entities/estimate-point.entity.js";
+import { Issue } from "../entities/issue.entity.js";
+import { IssueAssignee } from "../entities/issue-assignee.entity.js";
+import { IssueLabel } from "../entities/issue-label.entity.js";
+import { IssueActivity } from "../entities/issue-activity.entity.js";
+import { DraftIssue } from "../entities/draft-issue.entity.js";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -42,6 +47,11 @@ export const AppDataSource = new DataSource({
     Label,
     Estimate,
     EstimatePoint,
+    Issue,
+    IssueAssignee,
+    IssueLabel,
+    IssueActivity,
+    DraftIssue,
   ],
   migrations: [env.isProduction ? "dist/migrations/*.js" : "src/migrations/*.ts"],
   migrationsTableName: "migrations_history",
