@@ -7,6 +7,7 @@ import { User } from "../../entities/user.entity.js";
 import { ApiError } from "../../common/api-error.js";
 import { AppDataSource } from "../../config/data-source.js";
 import { WorkspaceRole } from "../../common/roles.js";
+import { dispatchWebhookEvent } from "../webhooks/webhook-dispatch.js";
 
 const ARCHIVABLE_STATUSES: ModuleStatus[] = ["completed", "cancelled"];
 
@@ -75,6 +76,7 @@ class ModuleService {
       sortOrder: (minSortOrder?.min ?? 0) - 10000,
     });
     await mod.save();
+    void dispatchWebhookEvent(project.workspaceId, "module", "created", { moduleId: mod.id, name: mod.name });
     return mod;
   }
 

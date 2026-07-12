@@ -8,6 +8,7 @@ import { User } from "../../entities/user.entity.js";
 import { ApiError } from "../../common/api-error.js";
 import { AppDataSource } from "../../config/data-source.js";
 import { WorkspaceRole } from "../../common/roles.js";
+import { dispatchWebhookEvent } from "../webhooks/webhook-dispatch.js";
 
 type CycleStatus = "draft" | "upcoming" | "current" | "completed";
 
@@ -101,6 +102,7 @@ class CycleService {
       sortOrder: (maxSequence?.min ?? 0) - 10000,
     });
     await cycle.save();
+    void dispatchWebhookEvent(project.workspaceId, "cycle", "created", { cycleId: cycle.id, name: cycle.name });
     return cycle;
   }
 

@@ -14,6 +14,7 @@ import { emailService } from "../../common/email.service.js";
 import { env } from "../../config/env.js";
 import { isValidIdentifier, normalizeIdentifier, randomLogoProps } from "./project-identifier.js";
 import { stateService } from "../states/state.service.js";
+import { dispatchWebhookEvent } from "../webhooks/webhook-dispatch.js";
 
 class ProjectService {
   /** Regras de visibilidade (seção 2.7 da spec): Guest só vê onde é membro; Member vê membro OU público; Admin vê tudo. */
@@ -104,6 +105,9 @@ class ProjectService {
 
       await stateService.seedDefaultStates(manager, project);
       return project;
+    }).then((project) => {
+      void dispatchWebhookEvent(workspace.id, "project", "created", { projectId: project.id, name: project.name });
+      return project;
     });
   }
 
@@ -140,6 +144,7 @@ class ProjectService {
     }
     Object.assign(project, input);
     await project.save();
+    void dispatchWebhookEvent(project.workspaceId, "project", "updated", { projectId: project.id, name: project.name });
     return project;
   }
 
@@ -161,6 +166,7 @@ class ProjectService {
       await manager.delete(Favorite, { entityType: "project", entityId: project.id });
       await manager.remove(project);
     });
+    void dispatchWebhookEvent(project.workspaceId, "project", "deleted", { projectId: project.id, name: project.name });
   }
 
   // ---- Membros ----

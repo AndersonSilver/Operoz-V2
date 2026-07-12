@@ -15,6 +15,7 @@ import { moduleController } from "../modules/module.controller.js";
 import { workspaceViewRouter } from "../views/view.routes.js";
 import { notificationRouter } from "../notifications/notification.routes.js";
 import { notificationController } from "../notifications/notification.controller.js";
+import { webhookRouter } from "../webhooks/webhook.routes.js";
 
 export const workspaceRouter = Router();
 
@@ -28,6 +29,7 @@ workspaceRouter.get("/:slug/cycles", loadWorkspace, asyncHandler(cycleController
 workspaceRouter.get("/:slug/modules", loadWorkspace, asyncHandler(moduleController.listForWorkspace));
 workspaceRouter.use("/:slug/views", loadWorkspace, workspaceViewRouter);
 workspaceRouter.use("/:slug/notifications", loadWorkspace, notificationRouter);
+workspaceRouter.use("/:slug/webhooks", loadWorkspace, webhookRouter);
 workspaceRouter.get(
   "/:slug/users/notifications/unread",
   loadWorkspace,

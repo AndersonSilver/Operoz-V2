@@ -81,3 +81,20 @@ export const passwordResetIpLimiter = createRateLimiter({
   points: 5,
   durationSeconds: 10 * 60,
 });
+
+// Requests autenticadas via `X-Api-Key`: 60/min para tokens normais,
+// 300/min para tokens de serviço (`isService=true`) — mesmos dois tiers
+// do original, mas sem reconsultar o token (já resolvido em requireAuth).
+export const apiTokenNormalLimiter = createRateLimiter({
+  keyPrefix: "rl:apitoken",
+  points: 60,
+  durationSeconds: 60,
+  keyFn: (req) => req.apiToken?.id ?? "unknown",
+});
+
+export const apiTokenServiceLimiter = createRateLimiter({
+  keyPrefix: "rl:apitoken:service",
+  points: 300,
+  durationSeconds: 60,
+  keyFn: (req) => req.apiToken?.id ?? "unknown",
+});

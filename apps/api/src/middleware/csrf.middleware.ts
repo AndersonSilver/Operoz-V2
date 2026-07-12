@@ -30,6 +30,13 @@ export function csrfMiddleware(req: Request, res: Response, next: NextFunction) 
     return next();
   }
 
+  // Autenticação via `X-Api-Key` é imune a CSRF por natureza — não é
+  // enviada automaticamente pelo navegador em requests cross-site como
+  // um cookie seria, então não faz sentido exigir o double-submit aqui.
+  if (req.get("x-api-key")) {
+    return next();
+  }
+
   const headerToken = req.get(CSRF_HEADER_NAME);
   if (!headerToken || headerToken !== token) {
     return next(new ApiError(403, "csrf_validation_failed", "Falha na validação CSRF."));

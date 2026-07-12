@@ -5,6 +5,7 @@ import { IssueAssignee } from "../../entities/issue-assignee.entity.js";
 import { IssueSubscriber } from "../../entities/issue-subscriber.entity.js";
 import { User } from "../../entities/user.entity.js";
 import { notificationService, type NotificationPreferenceKey } from "../notifications/notification.service.js";
+import { dispatchWebhookEvent, type WebhookAction } from "../webhooks/webhook-dispatch.js";
 
 interface LogFieldChangeInput {
   issueId: string | null;
@@ -49,6 +50,19 @@ export async function logIssueActivity(manager: EntityManager, input: LogFieldCh
     newIdentifier: input.newIdentifier ?? null,
   });
   await manager.save(activity);
+
+  if (input.issueId) {
+    const action: WebhookAction =
+      input.verb === "created" ? "created" : input.verb === "deleted" ? "deleted" : "updated";
+    const category = input.verb === "commented" || input.field === "comment" ? "issue_comment" : "issue";
+    void dispatchWebhookEvent(input.workspaceId, category, action, {
+      issueId: input.issueId,
+      projectId: input.projectId,
+      field: input.field ?? null,
+      oldValue: input.oldValue ?? null,
+      newValue: input.newValue ?? null,
+    });
+  }
 
   if (!input.issueId) return;
   const preferenceKey = classifyNotificationType(input.verb, input.field ?? null);

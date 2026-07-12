@@ -5,6 +5,7 @@ import { asyncHandler } from "../../common/async-handler.js";
 import { workspaceInviteController } from "../workspaces/workspace.controller.js";
 import { projectInviteController } from "../projects/project.controller.js";
 import { notificationController } from "../notifications/notification.controller.js";
+import { apiTokenRouter } from "../api-tokens/api-token.routes.js";
 
 export const userRouter = Router();
 
@@ -17,3 +18,4 @@ userRouter.get("/me/project-invitations", asyncHandler(projectInviteController.l
 userRouter.post("/me/project-invitations/accept", asyncHandler(projectInviteController.acceptMine));
 userRouter.get("/me/notification-preferences", asyncHandler(notificationController.getPreference));
 userRouter.patch("/me/notification-preferences", asyncHandler(notificationController.updatePreference));
+userRouter.use("/me/api-tokens", apiTokenRouter);
