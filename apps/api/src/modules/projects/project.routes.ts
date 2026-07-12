@@ -10,6 +10,8 @@ import { labelRouter } from "../labels/label.routes.js";
 import { estimateRouter } from "../estimates/estimate.routes.js";
 import { estimateController } from "../estimates/estimate.controller.js";
 import { issueRouter } from "../issues/issue.routes.js";
+import { cycleRouter } from "../cycles/cycle.routes.js";
+import { moduleRouter } from "../modules/module.routes.js";
 
 /** Montado em `/workspaces/:slug/projects` (depois de `loadWorkspace`, então `req.workspace`/`req.workspaceMember` já existem). */
 export const projectRouter = Router();
@@ -105,6 +107,8 @@ projectRouter.use("/:projectId/states", loadProject, stateRouter);
 projectRouter.use("/:projectId/labels", loadProject, labelRouter);
 projectRouter.use("/:projectId/estimates", loadProject, estimateRouter);
 projectRouter.use("/:projectId/issues", loadProject, issueRouter);
+projectRouter.use("/:projectId/cycles", loadProject, cycleRouter);
+projectRouter.use("/:projectId/modules", loadProject, moduleRouter);
 
 /** Rotas por token de convite de projeto — não dependem de `:slug`/`:projectId`. */
 export const projectInviteRouter = Router();

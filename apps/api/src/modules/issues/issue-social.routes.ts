@@ -10,6 +10,7 @@ import {
   subIssueController,
   subscriberController,
 } from "./issue-social.controller.js";
+import { issueModulesController } from "../modules/module.controller.js";
 import { asyncHandler } from "../../common/async-handler.js";
 
 /** Montado em `/workspaces/:slug/projects/:projectId/issues/:issueId` (mergeParams para herdar `:issueId`). */
@@ -53,3 +54,5 @@ issueSocialRouter.get("/sub-issues", asyncHandler(subIssueController.list));
 issueSocialRouter.post("/sub-issues", asyncHandler(subIssueController.bulkAssign));
 
 issueSocialRouter.get("/activities", asyncHandler(issueActivityController.timeline));
+
+issueSocialRouter.post("/modules", asyncHandler(issueModulesController.set));

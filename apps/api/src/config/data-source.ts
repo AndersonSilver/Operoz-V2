@@ -30,6 +30,11 @@ import { CommentReaction } from "../entities/comment-reaction.entity.js";
 import { IssueMention } from "../entities/issue-mention.entity.js";
 import { IssueSubscriber } from "../entities/issue-subscriber.entity.js";
 import { IssueRelation } from "../entities/issue-relation.entity.js";
+import { Cycle } from "../entities/cycle.entity.js";
+import { CycleIssue } from "../entities/cycle-issue.entity.js";
+import { ProjectModule } from "../entities/module.entity.js";
+import { ModuleIssue } from "../entities/module-issue.entity.js";
+import { ModuleLink } from "../entities/module-link.entity.js";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -68,6 +73,11 @@ export const AppDataSource = new DataSource({
     IssueMention,
     IssueSubscriber,
     IssueRelation,
+    Cycle,
+    CycleIssue,
+    ProjectModule,
+    ModuleIssue,
+    ModuleLink,
   ],
   migrations: [env.isProduction ? "dist/migrations/*.js" : "src/migrations/*.ts"],
   migrationsTableName: "migrations_history",

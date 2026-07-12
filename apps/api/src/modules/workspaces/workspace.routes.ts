@@ -10,6 +10,8 @@ import { stateController } from "../states/state.controller.js";
 import { estimateController } from "../estimates/estimate.controller.js";
 import { issueLookupController } from "../issues/issue.controller.js";
 import { draftIssueRouter } from "../issues/draft-issue.routes.js";
+import { cycleController } from "../cycles/cycle.controller.js";
+import { moduleController } from "../modules/module.controller.js";
 
 export const workspaceRouter = Router();
 
@@ -19,6 +21,8 @@ workspaceRouter.use("/:slug/draft-issues", loadWorkspace, draftIssueRouter);
 workspaceRouter.get("/:slug/labels", loadWorkspace, asyncHandler(labelController.listForWorkspace));
 workspaceRouter.get("/:slug/states", loadWorkspace, asyncHandler(stateController.listForWorkspace));
 workspaceRouter.get("/:slug/estimates", loadWorkspace, asyncHandler(estimateController.listForWorkspace));
+workspaceRouter.get("/:slug/cycles", loadWorkspace, asyncHandler(cycleController.listForWorkspace));
+workspaceRouter.get("/:slug/modules", loadWorkspace, asyncHandler(moduleController.listForWorkspace));
 workspaceRouter.get("/:slug/issues/search", loadWorkspace, asyncHandler(issueLookupController.search));
 workspaceRouter.get(
   "/:slug/issues/:identifier/:sequenceId",
