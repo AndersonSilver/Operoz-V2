@@ -1,0 +1,27 @@
+{
+  "name": "operoz-v2",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Operoz — reescrito do zero, independente do Plane.",
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --concurrency=15",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "clean": "turbo run clean && rm -rf .turbo node_modules"
+  },
+  "devDependencies": {
+    "turbo": "2.10.3",
+    "typescript": "5.7.3",
+    "prettier": "3.4.2"
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "packageManager": "pnpm@10.32.1",
+  "pnpm": {
+    "onlyBuiltDependencies": ["argon2", "esbuild"]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "@operoz/web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Frontend principal do Operoz — a implementar. Ver especificação: guia Parte 9 (auth/workspace/settings, project/issue/cycle/module, views/pages/editor, board/automação, notificações, assistente de IA) e Parte 10 (rotas, infra).",
+  "scripts": {
+    "dev": "echo 'apps/web: ainda não implementado — ver README.md' && exit 0",
+    "build": "echo 'apps/web: ainda não implementado' && exit 0",
+    "lint": "echo 'apps/web: ainda não implementado' && exit 0",
+    "typecheck": "echo 'apps/web: ainda não implementado' && exit 0",
+    "test": "echo 'apps/web: ainda não implementado' && exit 0"
+  }
+}

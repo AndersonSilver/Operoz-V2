@@ -1,0 +1,9 @@
+{
+  "name": "@operoz/config",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Configuração compartilhada (tsconfig, eslint) entre apps — ainda não implementado.",
+  "scripts": {
+    "build": "echo 'packages/config: ainda não implementado' && exit 0"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "@operoz/types",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Tipos TypeScript compartilhados entre apps — ainda não implementado.",
+  "main": "index.ts",
+  "scripts": {
+    "build": "echo 'packages/types: ainda não implementado' && exit 0",
+    "typecheck": "echo 'packages/types: ainda não implementado' && exit 0"
+  }
+}

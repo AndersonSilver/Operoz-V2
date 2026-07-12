@@ -1,0 +1,13 @@
+{
+  "name": "@operoz/mcp-server",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Servidor MCP (Model Context Protocol) do Operoz — ainda não implementado. Ver README.md.",
+  "scripts": {
+    "dev": "echo 'mcp-server: ainda não implementado — ver README.md' && exit 0",
+    "build": "echo 'mcp-server: ainda não implementado' && exit 0",
+    "lint": "echo 'mcp-server: ainda não implementado' && exit 0",
+    "typecheck": "echo 'mcp-server: ainda não implementado' && exit 0",
+    "test": "echo 'mcp-server: ainda não implementado' && exit 0"
+  }
+}

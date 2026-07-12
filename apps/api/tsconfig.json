@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["*"]
+    },
+    // apps/api roda como serviço, não é consumido como biblioteca por
+    // outro pacote — não precisa emitir .d.ts (evita ter que "nomear"
+    // tipos internos de dependências transitivas como express-serve-static-core).
+    "declaration": false,
+    "declarationMap": false
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

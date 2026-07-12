@@ -1,0 +1,13 @@
+{
+  "name": "@operoz/space",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Portal público de guests (issues/boards/intake por link âncora) — equivalente ao apps/space do projeto anterior. Ver README.md.",
+  "scripts": {
+    "dev": "echo 'apps/space: ainda não implementado — ver README.md' && exit 0",
+    "build": "echo 'apps/space: ainda não implementado' && exit 0",
+    "lint": "echo 'apps/space: ainda não implementado' && exit 0",
+    "typecheck": "echo 'apps/space: ainda não implementado' && exit 0",
+    "test": "echo 'apps/space: ainda não implementado' && exit 0"
+  }
+}

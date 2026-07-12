@@ -1,0 +1,13 @@
+{
+  "name": "@operoz/live",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Servidor de colaboração em tempo real (Yjs/Hocuspocus) para Pages — equivalente ao apps/live do projeto anterior. Ver README.md.",
+  "scripts": {
+    "dev": "echo 'apps/live: ainda não implementado — ver README.md' && exit 0",
+    "build": "echo 'apps/live: ainda não implementado' && exit 0",
+    "lint": "echo 'apps/live: ainda não implementado' && exit 0",
+    "typecheck": "echo 'apps/live: ainda não implementado' && exit 0",
+    "test": "echo 'apps/live: ainda não implementado' && exit 0"
+  }
+}
