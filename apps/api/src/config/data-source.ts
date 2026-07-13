@@ -46,6 +46,10 @@ import { Webhook } from "../entities/webhook.entity.js";
 import { WebhookLog } from "../entities/webhook-log.entity.js";
 import { AnalyticView } from "../entities/analytic-view.entity.js";
 import { ExporterHistory } from "../entities/exporter-history.entity.js";
+import { Team } from "../entities/team.entity.js";
+import { TeamMember } from "../entities/team-member.entity.js";
+import { UserRecentVisit } from "../entities/user-recent-visit.entity.js";
+import { Sticky } from "../entities/sticky.entity.js";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -100,6 +104,10 @@ export const AppDataSource = new DataSource({
     WebhookLog,
     AnalyticView,
     ExporterHistory,
+    Team,
+    TeamMember,
+    UserRecentVisit,
+    Sticky,
   ],
   migrations: [env.isProduction ? "dist/migrations/*.js" : "src/migrations/*.ts"],
   migrationsTableName: "migrations_history",

@@ -18,6 +18,9 @@ import { notificationController } from "../notifications/notification.controller
 import { webhookRouter } from "../webhooks/webhook.routes.js";
 import { analyticsRouter } from "../analytics/analytics.routes.js";
 import { exportRouter } from "../exports/export.routes.js";
+import { teamRouter } from "../teams/team.routes.js";
+import { recentVisitRouter } from "../recent-visits/recent-visit.routes.js";
+import { stickyRouter } from "../stickies/sticky.routes.js";
 
 export const workspaceRouter = Router();
 
@@ -34,6 +37,9 @@ workspaceRouter.use("/:slug/notifications", loadWorkspace, notificationRouter);
 workspaceRouter.use("/:slug/webhooks", loadWorkspace, webhookRouter);
 workspaceRouter.use("/:slug", loadWorkspace, analyticsRouter);
 workspaceRouter.use("/:slug", loadWorkspace, exportRouter);
+workspaceRouter.use("/:slug/teams", loadWorkspace, teamRouter);
+workspaceRouter.use("/:slug/recent-visits", loadWorkspace, recentVisitRouter);
+workspaceRouter.use("/:slug/stickies", loadWorkspace, stickyRouter);
 workspaceRouter.get(
   "/:slug/users/notifications/unread",
   loadWorkspace,

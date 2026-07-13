@@ -24,6 +24,7 @@ import { authRouter } from "./modules/auth/auth.routes.js";
 import { userRouter } from "./modules/users/user.routes.js";
 import { workspaceRouter, workspaceInviteRouter } from "./modules/workspaces/workspace.routes.js";
 import { projectInviteRouter } from "./modules/projects/project.routes.js";
+import { timezoneRouter } from "./modules/misc/timezone.routes.js";
 
 export function createApp(): Express {
   const app = express();
@@ -59,6 +60,8 @@ export function createApp(): Express {
   );
 
   app.get("/health", (_req, res) => res.json({ status: "ok" }));
+
+  app.use("/timezones", timezoneRouter);
 
   app.use("/auth", authRouter);
   app.use("/users", userRouter);
