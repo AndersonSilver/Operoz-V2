@@ -3,6 +3,7 @@ import { AppDataSource } from "./config/data-source.js";
 import { env } from "./config/env.js";
 import { logger } from "./common/logger.js";
 import { redis } from "./common/redis.js";
+import { startJobSystem, stopJobSystem } from "./jobs/bootstrap.js";
 
 async function main() {
   await AppDataSource.initialize();
@@ -10,6 +11,8 @@ async function main() {
 
   await redis.ping();
   logger.info("Conectado ao Redis");
+
+  await startJobSystem();
 
   const app = createApp();
   const server = app.listen(env.PORT, () => {
@@ -19,6 +22,7 @@ async function main() {
   const shutdown = async (signal: string) => {
     logger.info(`${signal} recebido, encerrando graciosamente...`);
     server.close(async () => {
+      await stopJobSystem();
       await AppDataSource.destroy();
       redis.disconnect();
       process.exit(0);
