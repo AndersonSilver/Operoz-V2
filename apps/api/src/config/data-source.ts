@@ -54,6 +54,7 @@ import { IssueVersion } from "../entities/issue-version.entity.js";
 import { IssueDescriptionVersion } from "../entities/issue-description-version.entity.js";
 import { CustomField } from "../entities/custom-field.entity.js";
 import { IssueCustomFieldValue } from "../entities/issue-custom-field-value.entity.js";
+import { Asset } from "../entities/asset.entity.js";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -116,6 +117,7 @@ export const AppDataSource = new DataSource({
     IssueDescriptionVersion,
     CustomField,
     IssueCustomFieldValue,
+    Asset,
   ],
   migrations: [env.isProduction ? "dist/migrations/*.js" : "src/migrations/*.ts"],
   migrationsTableName: "migrations_history",
