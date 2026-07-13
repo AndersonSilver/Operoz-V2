@@ -50,6 +50,8 @@ import { Team } from "../entities/team.entity.js";
 import { TeamMember } from "../entities/team-member.entity.js";
 import { UserRecentVisit } from "../entities/user-recent-visit.entity.js";
 import { Sticky } from "../entities/sticky.entity.js";
+import { IssueVersion } from "../entities/issue-version.entity.js";
+import { IssueDescriptionVersion } from "../entities/issue-description-version.entity.js";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -108,6 +110,8 @@ export const AppDataSource = new DataSource({
     TeamMember,
     UserRecentVisit,
     Sticky,
+    IssueVersion,
+    IssueDescriptionVersion,
   ],
   migrations: [env.isProduction ? "dist/migrations/*.js" : "src/migrations/*.ts"],
   migrationsTableName: "migrations_history",

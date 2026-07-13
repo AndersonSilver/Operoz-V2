@@ -12,6 +12,7 @@ import { nextSequenceId } from "./issue-sequence.js";
 import { logFieldDiffs, logIssueActivity } from "./issue-activity.service.js";
 import { syncIssueMentions } from "./mention-sync.js";
 import { subscriberService } from "./subscriber.service.js";
+import { issueVersionService } from "./issue-version.service.js";
 
 interface IssueWriteInput {
   name?: string;
@@ -233,7 +234,9 @@ class IssueService {
       await subscriberService.ensureSubscribed(issueId, assigneeId);
     }
 
-    return this.findOrThrow(project.id, issueId);
+    const issue = await this.findOrThrow(project.id, issueId);
+    await issueVersionService.trackIssueVersion(issue, actor.id);
+    return issue;
   }
 
   async update(project: Project, issue: Issue, actor: User, input: IssueWriteInput): Promise<Issue> {
@@ -336,6 +339,17 @@ class IssueService {
       for (const assigneeId of input.assigneeIds) {
         await subscriberService.ensureSubscribed(issue.id, assigneeId);
       }
+    }
+
+    const descriptionChanged = input.descriptionJson !== undefined || input.descriptionHtml !== undefined;
+    const coreFieldChanged = Object.keys(before).some(
+      (key) => before[key as keyof typeof before] !== issue[key as keyof typeof before],
+    );
+    if (descriptionChanged || coreFieldChanged || input.assigneeIds || input.labelIds) {
+      await issueVersionService.trackIssueVersion(issue, actor.id);
+    }
+    if (descriptionChanged) {
+      await issueVersionService.trackDescriptionVersion(issue, actor.id);
     }
 
     return this.findOrThrow(project.id, issue.id);

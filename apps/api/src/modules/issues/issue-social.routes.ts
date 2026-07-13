@@ -11,6 +11,7 @@ import {
   subscriberController,
 } from "./issue-social.controller.js";
 import { issueModulesController } from "../modules/module.controller.js";
+import { issueVersionController } from "./issue-version.controller.js";
 import { asyncHandler } from "../../common/async-handler.js";
 
 /** Montado em `/workspaces/:slug/projects/:projectId/issues/:issueId` (mergeParams para herdar `:issueId`). */
@@ -56,3 +57,10 @@ issueSocialRouter.post("/sub-issues", asyncHandler(subIssueController.bulkAssign
 issueSocialRouter.get("/activities", asyncHandler(issueActivityController.timeline));
 
 issueSocialRouter.post("/modules", asyncHandler(issueModulesController.set));
+
+issueSocialRouter.get("/versions", asyncHandler(issueVersionController.listVersions));
+issueSocialRouter.get("/description-versions", asyncHandler(issueVersionController.listDescriptionVersions));
+issueSocialRouter.post(
+  "/description-versions/:versionId/restore",
+  asyncHandler(issueVersionController.restoreDescriptionVersion),
+);
