@@ -23,6 +23,7 @@ import { recentVisitRouter } from "../recent-visits/recent-visit.routes.js";
 import { stickyRouter } from "../stickies/sticky.routes.js";
 import { searchController } from "../search/search.controller.js";
 import { assetRouter } from "../assets/asset.routes.js";
+import { boardRouter } from "../boards/board.routes.js";
 
 export const workspaceRouter = Router();
 
@@ -43,6 +44,7 @@ workspaceRouter.use("/:slug/teams", loadWorkspace, teamRouter);
 workspaceRouter.use("/:slug/recent-visits", loadWorkspace, recentVisitRouter);
 workspaceRouter.use("/:slug/stickies", loadWorkspace, stickyRouter);
 workspaceRouter.use("/:slug/assets", loadWorkspace, assetRouter);
+workspaceRouter.use("/:slug/boards", loadWorkspace, boardRouter);
 workspaceRouter.get(
   "/:slug/users/notifications/unread",
   loadWorkspace,

@@ -55,6 +55,9 @@ import { IssueDescriptionVersion } from "../entities/issue-description-version.e
 import { CustomField } from "../entities/custom-field.entity.js";
 import { IssueCustomFieldValue } from "../entities/issue-custom-field-value.entity.js";
 import { Asset } from "../entities/asset.entity.js";
+import { Board } from "../entities/board.entity.js";
+import { BoardMember } from "../entities/board-member.entity.js";
+import { BoardProject } from "../entities/board-project.entity.js";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -118,6 +121,9 @@ export const AppDataSource = new DataSource({
     CustomField,
     IssueCustomFieldValue,
     Asset,
+    Board,
+    BoardMember,
+    BoardProject,
   ],
   migrations: [env.isProduction ? "dist/migrations/*.js" : "src/migrations/*.ts"],
   migrationsTableName: "migrations_history",
