@@ -21,6 +21,7 @@ import { exportRouter } from "../exports/export.routes.js";
 import { teamRouter } from "../teams/team.routes.js";
 import { recentVisitRouter } from "../recent-visits/recent-visit.routes.js";
 import { stickyRouter } from "../stickies/sticky.routes.js";
+import { searchController } from "../search/search.controller.js";
 
 export const workspaceRouter = Router();
 
@@ -46,6 +47,7 @@ workspaceRouter.get(
   asyncHandler(notificationController.unreadCounts),
 );
 workspaceRouter.get("/:slug/issues/search", loadWorkspace, asyncHandler(issueLookupController.search));
+workspaceRouter.get("/:slug/search", loadWorkspace, asyncHandler(searchController.search));
 workspaceRouter.get(
   "/:slug/issues/:identifier/:sequenceId",
   loadWorkspace,
