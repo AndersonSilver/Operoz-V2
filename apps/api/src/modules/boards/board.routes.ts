@@ -2,6 +2,7 @@ import { Router } from "express";
 import { boardController } from "./board.controller.js";
 import { loadBoard, requireBoardRole } from "./board.middleware.js";
 import { requireWorkspaceRole } from "../workspaces/workspace.middleware.js";
+import { client360Router } from "../client-360/client-360.routes.js";
 import { asyncHandler } from "../../common/async-handler.js";
 import { WorkspaceRole } from "../../common/roles.js";
 
@@ -63,3 +64,5 @@ boardRouter.delete(
   requireBoardRole(WorkspaceRole.ADMIN),
   asyncHandler(boardController.removeMember),
 );
+
+boardRouter.use("/:boardId/client-360", loadBoard, client360Router);

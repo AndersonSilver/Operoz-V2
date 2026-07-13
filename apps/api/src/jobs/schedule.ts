@@ -1,5 +1,5 @@
 import { maintenanceQueue } from "./queues.js";
-import { ARCHIVE_ISSUES_JOB, CLEANUP_EXPORTS_JOB } from "./maintenance-worker.js";
+import { ARCHIVE_ISSUES_JOB, CLEANUP_EXPORTS_JOB, CLIENT_360_SNAPSHOT_JOB } from "./maintenance-worker.js";
 
 /**
  * Registra os jobs recorrentes. Idempotente: o BullMQ deriva o id do
@@ -16,5 +16,10 @@ export async function scheduleRecurringJobs(): Promise<void> {
     CLEANUP_EXPORTS_JOB,
     {},
     { repeat: { pattern: "30 3 * * *" }, jobId: CLEANUP_EXPORTS_JOB },
+  );
+  await maintenanceQueue.add(
+    CLIENT_360_SNAPSHOT_JOB,
+    {},
+    { repeat: { pattern: "0 4 * * 1" }, jobId: CLIENT_360_SNAPSHOT_JOB },
   );
 }

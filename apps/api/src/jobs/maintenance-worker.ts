@@ -3,10 +3,12 @@ import { jobsConnection } from "./connection.js";
 import { MAINTENANCE_QUEUE } from "./queues.js";
 import { runArchiveAndCloseJob } from "../modules/issues/archive-job.js";
 import { exportService } from "../modules/exports/export.service.js";
+import { runClient360SnapshotJob } from "../modules/client-360/snapshot-job.js";
 import { logger } from "../common/logger.js";
 
 export const ARCHIVE_ISSUES_JOB = "archive-issues";
 export const CLEANUP_EXPORTS_JOB = "cleanup-exports";
+export const CLIENT_360_SNAPSHOT_JOB = "client-360-snapshot";
 
 async function process(job: Job): Promise<void> {
   switch (job.name) {
@@ -18,6 +20,11 @@ async function process(job: Job): Promise<void> {
     case CLEANUP_EXPORTS_JOB: {
       const count = await exportService.cleanupExpiredExports();
       logger.info({ count }, "Job de limpeza de exports concluído");
+      return;
+    }
+    case CLIENT_360_SNAPSHOT_JOB: {
+      const { snapshots } = await runClient360SnapshotJob();
+      logger.info({ snapshots }, "Job de snapshot semanal do Client 360 concluído");
       return;
     }
     default:

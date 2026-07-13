@@ -58,6 +58,9 @@ import { Asset } from "../entities/asset.entity.js";
 import { Board } from "../entities/board.entity.js";
 import { BoardMember } from "../entities/board-member.entity.js";
 import { BoardProject } from "../entities/board-project.entity.js";
+import { StatusReport } from "../entities/status-report.entity.js";
+import { BoardClient360HealthSettings } from "../entities/board-client-360-health-settings.entity.js";
+import { Client360HealthSnapshot } from "../entities/client-360-health-snapshot.entity.js";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -124,6 +127,9 @@ export const AppDataSource = new DataSource({
     Board,
     BoardMember,
     BoardProject,
+    StatusReport,
+    BoardClient360HealthSettings,
+    Client360HealthSnapshot,
   ],
   migrations: [env.isProduction ? "dist/migrations/*.js" : "src/migrations/*.ts"],
   migrationsTableName: "migrations_history",
