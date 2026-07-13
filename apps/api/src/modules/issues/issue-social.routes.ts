@@ -12,6 +12,7 @@ import {
 } from "./issue-social.controller.js";
 import { issueModulesController } from "../modules/module.controller.js";
 import { issueVersionController } from "./issue-version.controller.js";
+import { issueCustomFieldValueController } from "../custom-fields/issue-custom-field-value.controller.js";
 import { asyncHandler } from "../../common/async-handler.js";
 
 /** Montado em `/workspaces/:slug/projects/:projectId/issues/:issueId` (mergeParams para herdar `:issueId`). */
@@ -64,3 +65,6 @@ issueSocialRouter.post(
   "/description-versions/:versionId/restore",
   asyncHandler(issueVersionController.restoreDescriptionVersion),
 );
+
+issueSocialRouter.get("/custom-fields", asyncHandler(issueCustomFieldValueController.list));
+issueSocialRouter.put("/custom-fields", asyncHandler(issueCustomFieldValueController.set));

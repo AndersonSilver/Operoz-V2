@@ -52,6 +52,8 @@ import { UserRecentVisit } from "../entities/user-recent-visit.entity.js";
 import { Sticky } from "../entities/sticky.entity.js";
 import { IssueVersion } from "../entities/issue-version.entity.js";
 import { IssueDescriptionVersion } from "../entities/issue-description-version.entity.js";
+import { CustomField } from "../entities/custom-field.entity.js";
+import { IssueCustomFieldValue } from "../entities/issue-custom-field-value.entity.js";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -112,6 +114,8 @@ export const AppDataSource = new DataSource({
     Sticky,
     IssueVersion,
     IssueDescriptionVersion,
+    CustomField,
+    IssueCustomFieldValue,
   ],
   migrations: [env.isProduction ? "dist/migrations/*.js" : "src/migrations/*.ts"],
   migrationsTableName: "migrations_history",
